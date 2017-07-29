@@ -1,4 +1,5 @@
-# manthan
+[![Build Status](https://travis-ci.org/ashwanthkumar/manthan-product-affinity.svg?branch=master)](https://travis-ci.org/ashwanthkumar/manthan-product-affinity)
+# manthan product affinity
 
 Repository contains the code that was build as part of the  manthan hackathon.
 
