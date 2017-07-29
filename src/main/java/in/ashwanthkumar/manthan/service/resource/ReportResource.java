@@ -1,10 +1,11 @@
-package in.ashwanthkumar.manthan.service;
+package in.ashwanthkumar.manthan.service.resource;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
+import in.ashwanthkumar.manthan.service.GridResponse;
 import org.apache.commons.io.IOUtils;
 
 import javax.ws.rs.GET;
@@ -44,8 +45,6 @@ public class ReportResource {
         if (request.containsKey("sort")) {
             sortField = ((Map) ((List) request.get("sort")).get(0)).get("field").toString();
         }
-        LineNumberReader reader = new LineNumberReader(new FileReader(dataFile));
-        reader.setLineNumber(offset);
         String finalSortField = sortField;
         List<Map> records = Files.lines(Paths.get(dataFile))
                 .skip(offset)

@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
-public class DatasetConverter {
+public class DatasetConverterForReport {
     public static void main(String[] args) throws IOException, InterruptedException {
         String inputFile = args[0];
         String outputFile = args[1];
