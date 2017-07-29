@@ -10,12 +10,15 @@ import in.ashwanthkumar.manthan.core.Ticker;
 import in.ashwanthkumar.manthan.util.SchedulerService;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CountDownLatch;
 
 public class AnalyseDataset {
@@ -24,19 +27,18 @@ public class AnalyseDataset {
     public static void main(String[] args) throws IOException, InterruptedException {
         String inputFile = args[0];
         String outputFile = args[1];
-        File file = new File(inputFile);
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line;
-        TreeMap<String, Set<String>> productsIndex = new TreeMap<>();
+
+        ConcurrentSkipListMap<String, Set<String>> productsIndex = new ConcurrentSkipListMap<>();
         Set<String> allTranscations = Sets.newHashSet();
+
         Stopwatch watch = Stopwatch.createStarted();
-        while ((line = reader.readLine()) != null) {
+        Files.lines(Paths.get(inputFile)).parallel().forEach(line -> {
             Ticker ticker = Ticker.parse(line);
             String productName = ticker.getProductDescription();
             String invoiceNumber = ticker.getInvoiceNumber();
             addToIndex(productsIndex, productName, invoiceNumber);
             allTranscations.add(invoiceNumber);
-        }
+        });
         watch.stop();
 
         System.out.println("Total number of products - " + productsIndex.size());
@@ -69,7 +71,10 @@ public class AnalyseDataset {
         System.out.println("Wrote the aggregate index in binary form at " + outputFile);
     }
 
-    private static void updateAggregateIndex(TreeMap<String, Set<String>> productToInvoices, Map<String, ProductAffinityRecord> aggregateIndex, String baseProduct, Set<String> baseProductTransactions, int allTransactionsCount, CountDownLatch latch) {
+    private static void updateAggregateIndex(Map<String, Set<String>> productToInvoices,
+                                             Map<String, ProductAffinityRecord> aggregateIndex,
+                                             String baseProduct, Set<String> baseProductTransactions,
+                                             int allTransactionsCount, CountDownLatch latch) {
 //        System.out.println("Base=" + baseProduct + ",transactions=" + baseProductTransactions);
         for (String targetProduct : productToInvoices.keySet()) {
             if (!StringUtils.equals(targetProduct, baseProduct)) {
