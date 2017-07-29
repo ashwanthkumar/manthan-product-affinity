@@ -24,8 +24,7 @@ public class DatasetConverter {
         System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", String.valueOf(Runtime.getRuntime().availableProcessors()));
 
         final ProductIndex productsIndex = new ProductIndex();
-
-        Stopwatch watch = Stopwatch.createStarted();
+        final Stopwatch watch = Stopwatch.createStarted();
         Files.lines(Paths.get(inputFile)).parallel().forEach(line -> {
             Ticker ticker = Ticker.parse(line);
             productsIndex.add(ticker);
@@ -65,7 +64,7 @@ public class DatasetConverter {
 
         System.out.println("Starting to write the aggregate index to " + outputFile);
         FileOutputStream outputStream = new FileOutputStream(outputFile);
-        Kryo kryo = new Kryo();
+        final Kryo kryo = new Kryo();
         kryo.register(ProductAffinityRecord.class, new CompatibleFieldSerializer(kryo, ProductAffinityRecord.class));
         Output output = new Output(outputStream);
         kryo.writeObject(output, aggregateIndex);
