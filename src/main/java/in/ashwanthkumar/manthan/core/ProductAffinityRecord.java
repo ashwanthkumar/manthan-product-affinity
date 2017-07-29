@@ -1,4 +1,4 @@
-package in.ashwanthkumar.manthan;
+package in.ashwanthkumar.manthan.core;
 
 import com.google.common.collect.Sets;
 
