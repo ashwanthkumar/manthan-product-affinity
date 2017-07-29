@@ -64,4 +64,28 @@ public class ProductAffinityRecordTest {
         assertThat(record.affinity(), is(40.0));
     }
 
+    @Test
+    public void shouldPlusTwoInstances() {
+        ProductAffinityRecord one = new ProductAffinityRecord(
+                "BaseProduct",
+                "TargetProduct",
+                Sets.newHashSet("T1", "T2", "T3"),
+                Sets.newHashSet("T1", "T2", "T4", "T5"),
+                5);
+
+        ProductAffinityRecord two = new ProductAffinityRecord(
+                "BaseProduct",
+                "TargetProduct",
+                Sets.newHashSet("T3", "T5", "T6"),
+                Sets.newHashSet("T1", "T2", "T4", "T5"),
+                6);
+
+        ProductAffinityRecord merged = one.plus(two);
+        assertThat(merged.getBaseProduct(), is(one.getBaseProduct()));
+        assertThat(merged.getTargetProduct(), is(one.getTargetProduct()));
+        assertThat(merged.getTransactionsOfBaseProduct(), is(Sets.newHashSet("T1", "T2", "T3", "T5", "T6")));
+        assertThat(merged.getTransactionsOfTargetProduct(), is(Sets.newHashSet("T1", "T2", "T4", "T5")));
+        assertThat(merged.getAllTransactionsCount(), is(6L));
+    }
+
 }

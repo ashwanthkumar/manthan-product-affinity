@@ -1,6 +1,8 @@
 package in.ashwanthkumar.manthan.core;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
 
@@ -79,11 +81,34 @@ public class ProductAffinityRecord {
         return 100 * ((double) jointSupportCount()) / (baseSupportCount() + targetSupportCount() - jointSupportCount());
     }
 
+    public ProductAffinityRecord plus(ProductAffinityRecord another) {
+        Preconditions.checkArgument(StringUtils.equals(this.getBaseProduct(), another.getBaseProduct()) && StringUtils.equals(this.getTargetProduct(), another.getTargetProduct()), "Can't plus 2 different ProductAffinityRecord. Both base and target should match.");
+        long maxOfTransactions = (this.allTransactionsCount > another.allTransactionsCount) ? this.allTransactionsCount : another.allTransactionsCount;
+        return new ProductAffinityRecord(
+                this.getBaseProduct(),
+                this.getTargetProduct(),
+                Sets.union(this.transactionsOfBaseProduct, another.transactionsOfBaseProduct),
+                Sets.union(this.transactionsOfTargetProduct, another.transactionsOfTargetProduct),
+                maxOfTransactions);
+    }
+
     public String getBaseProduct() {
         return baseProduct;
     }
 
     public String getTargetProduct() {
         return targetProduct;
+    }
+
+    public Set<String> getTransactionsOfBaseProduct() {
+        return transactionsOfBaseProduct;
+    }
+
+    public Set<String> getTransactionsOfTargetProduct() {
+        return transactionsOfTargetProduct;
+    }
+
+    public long getAllTransactionsCount() {
+        return allTransactionsCount;
     }
 }
