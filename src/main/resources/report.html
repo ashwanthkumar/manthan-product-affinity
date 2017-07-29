@@ -12,6 +12,7 @@
 $(function () {
     $('#grid').w2grid({
         name: 'grid',
+        limit: 1000,
         method: 'GET', // need this to avoid 412 error on Safari
         show: {
             toolbar: false,
