@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="http://w2ui.com/src/w2ui-1.5.rc1.min.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://w2ui.com/src/w2ui-1.5.rc1.min.js"></script>
+</head>
+<body>
+    <div id="grid" style="width: 100%; height: 650px;"></div>
+</body>
+<script>
+$(function () {
+    $('#grid').w2grid({
+        name: 'grid',
+        method: 'GET', // need this to avoid 412 error on Safari
+        show: {
+            toolbar: true,
+            footer: true
+        },
+        multiSearch: false,
+        columns: [
+            { field: 'base_product', caption: 'Base Product', size: '150px', sortable: true },
+            { field: 'base_support_count', caption: 'Base Support Count', size: '100%', sortable: true,  render: 'int'},
+            { field: 'base_support_percentage', caption: 'Base Support %', size: '100%', sortable: true, render: 'percent' },
+            { field: 'target_product', caption: 'Target Product', size: '150px', sortable: true },
+            { field: 'target_support_count', caption: 'Target Support Count', size: '100%', sortable: true },
+            { field: 'target_support_percentage', caption: 'Target Support %', size: '100%', render: 'percent' },
+            { field: 'join_support_count', caption: 'Join Support Count (Base & Target)', size: '100%', render: 'percent' },
+            { field: 'join_support_percentage', caption: 'Join Support % (Base & Target)', size: '100%', render: 'percent' },
+            { field: 'confidence_base_given_target_percentage', caption: 'Confidence % (Base => Target)', size: '100%', render: 'percent' },
+            { field: 'confidence_target_given_base_percentage', caption: 'Confidence % (Target => Base)', size: '100%', render: 'percent' },
+            { field: 'lift', caption: 'Lift', size: '100%', sortable: true, render: 'int' },
+            { field: 'affinity', caption: 'Affinity %', size: '100%', sortable: true, render: 'percent' }
+        ],
+        url: '/report'
+    });
+    w2ui['grid'].load('/report');
+});
+</script>
+</html>
