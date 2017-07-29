@@ -21,7 +21,7 @@ public class DatasetConverter {
         String inputFile = args[0];
         String outputFile = args[1];
 
-        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", String.valueOf(Runtime.getRuntime().availableProcessors()));
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", String.valueOf(2 * Runtime.getRuntime().availableProcessors()));
 
         final ProductIndex productsIndex = new ProductIndex();
         final Stopwatch watch = Stopwatch.createStarted();

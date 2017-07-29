@@ -3,6 +3,8 @@ package in.ashwanthkumar.manthan.core;
 import com.google.common.collect.Sets;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -93,5 +95,27 @@ public class ProductAffinityRecordTest {
         assertThat(record.aggregateKey(), is("BaseProductTargetProduct"));
     }
 
+    @Test
+    public void shouldReturnAllNecessaryKeysInMap() {
+        ProductAffinityRecord record = new ProductAffinityRecord(
+                "BaseProduct",
+                "TargetProduct",
+                Sets.newHashSet("T3", "T5", "T6"),
+                Sets.newHashSet("T1", "T2", "T4", "T5"),
+                6);
+        Map<String, Object> output = record.forOutput();
+        assertThat(output.get("base_product"), is(record.getBaseProduct()));
+        assertThat(output.get("base_support_count"), is(record.baseSupportCount()));
+        assertThat(output.get("base_support_percentage"), is(record.baseSupportPercentage()));
+        assertThat(output.get("target_product"), is(record.getTargetProduct()));
+        assertThat(output.get("target_support_count"), is(record.targetSupportCount()));
+        assertThat(output.get("target_support_percentage"), is(record.targetSupportPercentage()));
+        assertThat(output.get("join_support_count"), is(record.jointSupportCount()));
+        assertThat(output.get("join_support_percentage"), is(record.joinSupportPercentage()));
+        assertThat(output.get("confidence_base_given_target_percentage"), is(record.confidenceForBaseGivenTargetPercentage()));
+        assertThat(output.get("confidence_target_given_base_percentage"), is(record.confidenceForTargetGivenBasePercentage()));
+        assertThat(output.get("lift"), is(record.lift()));
+        assertThat(output.get("affinity"), is(record.affinity()));
+    }
 
 }
