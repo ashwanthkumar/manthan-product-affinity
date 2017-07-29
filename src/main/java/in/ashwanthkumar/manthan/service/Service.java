@@ -10,6 +10,6 @@ public class Service extends Application<ServiceConfiguration> {
 
     @Override
     public void run(ServiceConfiguration serviceConfiguration, Environment environment) throws Exception {
-        environment.jersey().register(new ReportResource("aggregate_index_10K.bin"));
+        environment.jersey().register(new ReportResource("aggregate_1.5M.jsonl"));
     }
 }

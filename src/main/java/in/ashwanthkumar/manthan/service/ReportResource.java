@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,8 +40,8 @@ public class ReportResource {
         Map request = mapper.readValue(requestFromGrid, Map.class);
         int offset = (int) request.get("offset");
         int limit = (int) request.get("limit");
-        String sortField= null;
-        if(request.containsKey("sort")) {
+        String sortField = null;
+        if (request.containsKey("sort")) {
             sortField = ((Map) ((List) request.get("sort")).get(0)).get("field").toString();
         }
         LineNumberReader reader = new LineNumberReader(new FileReader(dataFile));
@@ -58,21 +57,14 @@ public class ReportResource {
                         return ImmutableMap.of();
                     }
                 })
-                .sorted(new Comparator<Map>() {
-                    @Override
-                    public int compare(Map o1, Map o2) {
-                        if(finalSortField != null) {
-                            return ((Comparable) o1.get(finalSortField)).compareTo(o2.get(finalSortField));
-                        } else {
-                            return 0;
-                        }
+                .sorted((o1, o2) -> {
+                    if (finalSortField != null) {
+                        return ((Comparable) o1.get(finalSortField)).compareTo(o2.get(finalSortField));
+                    } else {
+                        return 0;
                     }
                 })
                 .collect(Collectors.toList());
-
-        ImmutableMap<String, Object> responseMap = ImmutableMap.of("records", records, "total", totalNumberOfRecords, "status", "success");
-//        String responseJson = mapper.writeValueAsString(responseMap);
-//        return responseMap;
         return new GridResponse(records, totalNumberOfRecords);
     }
 
