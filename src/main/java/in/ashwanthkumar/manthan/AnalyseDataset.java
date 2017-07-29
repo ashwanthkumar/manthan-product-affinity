@@ -5,7 +5,6 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CompatibleFieldSerializer;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Sets;
-import com.google.common.hash.Hashing;
 import in.ashwanthkumar.manthan.core.ProductAffinityRecord;
 import in.ashwanthkumar.manthan.core.Ticker;
 import in.ashwanthkumar.manthan.util.SchedulerService;
@@ -43,6 +42,7 @@ public class AnalyseDataset {
         System.out.println("Total number of products - " + productsIndex.size());
         System.out.println("Total number of invoices - " + allTranscations.size());
         System.out.println("Time took to read the file and load the data: " + watch.toString());
+
         Map<String, ProductAffinityRecord> aggregateIndex = new ConcurrentHashMap<>();
 
         watch.reset();

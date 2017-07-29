@@ -25,6 +25,10 @@ public class ProductAffinityRecord {
         invoicesIntersection = Sets.intersection(transactionsOfBaseProduct, transactionsOfTargetProduct);
     }
 
+    public ProductAffinityRecord(String baseProduct, String targetProduct, long allTransactionsCount) {
+        this(baseProduct, targetProduct, Sets.newHashSet(), Sets.newHashSet(), allTransactionsCount);
+    }
+
     public double supportForBaseProduct() {
         return (double) transactionsOfBaseProduct.size() / allTransactionsCount;
     }
