@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class AggregateIndexWriter {
+public class AggregateIndexWriter implements AutoCloseable {
     private ObjectMapper mapper = new ObjectMapper();
     private PrintWriter writer;
 

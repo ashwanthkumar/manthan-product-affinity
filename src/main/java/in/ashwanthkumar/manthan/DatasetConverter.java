@@ -1,15 +1,11 @@
 package in.ashwanthkumar.manthan;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.CompatibleFieldSerializer;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Sets;
 import in.ashwanthkumar.manthan.core.ProductAffinityRecord;
 import in.ashwanthkumar.manthan.core.Ticker;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -63,13 +59,16 @@ public class DatasetConverter {
         System.out.println("Size of Aggregate Index - " + aggregateIndex.size());
 
         System.out.println("Starting to write the aggregate index to " + outputFile);
-        FileOutputStream outputStream = new FileOutputStream(outputFile);
-        final Kryo kryo = new Kryo();
-        kryo.register(ProductAffinityRecord.class, new CompatibleFieldSerializer(kryo, ProductAffinityRecord.class));
-        Output output = new Output(outputStream);
-        kryo.writeObject(output, aggregateIndex);
-        output.close();
-        outputStream.close();
-        System.out.println("Wrote the aggregate index in binary form at " + outputFile);
+        try (AggregateIndexWriter writer = new AggregateIndexWriter(outputFile)) {
+
+            aggregateIndex.allAggregates().forEach((key) -> {
+                try {
+                    writer.write(aggregateIndex.lookup(key));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        System.out.println("Wrote the aggregate index as json lines to " + outputFile);
     }
 }
