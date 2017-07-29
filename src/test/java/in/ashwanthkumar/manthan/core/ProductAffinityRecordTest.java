@@ -88,4 +88,10 @@ public class ProductAffinityRecordTest {
         assertThat(merged.getAllTransactionsCount(), is(6L));
     }
 
+    @Test
+    public void shouldComputeAggregateKey() {
+        assertThat(record.aggregateKey(), is("BaseProductTargetProduct"));
+    }
+
+
 }

@@ -10,4 +10,6 @@ public interface Index<K, V> {
     void put(K key, V value);
 
     Stream<K> allKeys();
+
+    long size();
 }

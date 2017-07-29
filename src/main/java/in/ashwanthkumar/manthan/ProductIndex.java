@@ -4,7 +4,6 @@ import in.ashwanthkumar.manthan.core.Ticker;
 import in.ashwanthkumar.manthan.index.InMemoryIndex;
 import in.ashwanthkumar.manthan.index.Index;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Stream;
@@ -15,15 +14,16 @@ import java.util.stream.Stream;
  */
 public class ProductIndex {
     private Index<String, Set<String>> index = new InMemoryIndex<>();
+    private Set<String> allTransactions = new ConcurrentSkipListSet<>();
 
-    public ProductIndex add(Ticker ticker) {
+    public void add(Ticker ticker) {
         String productName = ticker.getProductDescription();
         String invoiceNumber = ticker.getInvoiceNumber();
 
         Set<String> invoices = index.lookup(productName, new ConcurrentSkipListSet<>());
         invoices.add(invoiceNumber);
         index.put(productName, invoices);
-        return this;
+        allTransactions.add(invoiceNumber);
     }
 
     public Set<String> lookup(String productName) {
@@ -38,10 +38,11 @@ public class ProductIndex {
         return index.allKeys();
     }
 
-    private static <K, V> V getOrElse(Map<K, V> map, K key, V defaultValue) {
-        V value = map.get(key);
-        if (value != null) return value;
-        else return defaultValue;
+    public int totalTransactionsCount() {
+        return allTransactions.size();
     }
 
+    public int size() {
+        return (int) index.size();
+    }
 }

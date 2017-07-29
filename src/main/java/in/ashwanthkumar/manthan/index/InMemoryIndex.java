@@ -41,6 +41,11 @@ public class InMemoryIndex<K, V> implements Index<K, V> {
         return index.keySet().stream();
     }
 
+    @Override
+    public long size() {
+        return index.size();
+    }
+
     private V getOrElse(Map<K, V> map, K key, V defaultValue) {
         V value = map.get(key);
         if (value != null) return value;

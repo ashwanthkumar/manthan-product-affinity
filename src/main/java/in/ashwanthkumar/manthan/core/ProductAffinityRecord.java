@@ -115,4 +115,8 @@ public class ProductAffinityRecord {
     public long getAllTransactionsCount() {
         return allTransactionsCount;
     }
+
+    public String aggregateKey() {
+        return baseProduct + targetProduct;
+    }
 }
